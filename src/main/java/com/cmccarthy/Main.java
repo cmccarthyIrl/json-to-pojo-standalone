@@ -23,6 +23,7 @@ public class Main extends Application {
         screenController.activate("main");
         primaryStage.setScene(screenController.getScene());
         primaryStage.setResizable(false);
+        primaryStage.setTitle("JSON 2 POJO");
         primaryStage.show();
     }
 }

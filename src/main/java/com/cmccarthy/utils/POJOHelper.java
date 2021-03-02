@@ -1,6 +1,7 @@
 package com.cmccarthy.utils;
 
 import com.sun.codemodel.JCodeModel;
+import org.apache.commons.io.FileUtils;
 import org.jsonschema2pojo.*;
 import org.jsonschema2pojo.rules.RuleFactory;
 
@@ -23,15 +24,13 @@ public class POJOHelper {
         assert pathnameList != null;
         for (String pathname : pathnameList) {
             if (pathname.endsWith(".java")) {
-                System.out.println(pathname);
                 try (Stream<String> stream = Files.lines(Paths.get("target/generated-sources/" + pathname), StandardCharsets.UTF_8)) {
                     stream.forEach(s -> contentBuilder.append(s).append("\n"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
-                contentBuilder.append("==============================================================").append("\n")
-                        .append("==============================================================").append("\n")
+                contentBuilder.append("\n")
                         .append("==============================================================").append("\n")
                         .append("==============================================================").append("\n");
             }
@@ -86,5 +85,9 @@ public class POJOHelper {
         codeModel.build(new File("target/"), new PrintStream(new ByteArrayOutputStream()));
 
         return readLineByLine();
+    }
+
+    public void removeFiles() throws IOException {
+        FileUtils.cleanDirectory(new File("target/generated-sources/"));
     }
 }

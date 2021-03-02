@@ -61,8 +61,8 @@
         <ComboBox fx:id="sourceLang" prefHeight="26.0" prefWidth="167.0" promptText="Source Language">
             <items>
                 <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="JSON Schema"/>
                     <String fx:value="JSON"/>
+                    <String fx:value="JSON Schema"/>
                     <String fx:value="YAML Schema"/>
                     <String fx:value="YAML"/>
                 </FXCollections>

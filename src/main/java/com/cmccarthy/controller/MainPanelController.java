@@ -41,6 +41,7 @@ public class MainPanelController implements Initializable {
         updateText();
         String value = pojoHelper.buildJson();
         outputTextArea.setText(value);
+        pojoHelper.removeFiles();
     }
 
     public void updateText() throws IOException {
