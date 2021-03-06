@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
 import java.io.IOException;
@@ -18,6 +19,8 @@ public class MainPanelController implements Initializable {
     private final POJOHelper pojoHelper = new POJOHelper();
     @FXML
     Button generatePOJO = new Button();
+    @FXML
+    Label warningLabel = new Label();
     @FXML
     ComboBox<?> targetLang = new ComboBox<>();
     @FXML
@@ -34,13 +37,22 @@ public class MainPanelController implements Initializable {
         targetLang.getSelectionModel().selectFirst();
         sourceLang.getSelectionModel().selectFirst();
         annotationLang.getSelectionModel().selectFirst();
+        warningLabel.setVisible(false);
+        warningLabel.setManaged(false);
     }
 
     @FXML
     public void generatePageObject() throws IOException {
         updateText();
-        String value = pojoHelper.buildJson();
-        outputTextArea.setText(value);
+        try {
+            String value = pojoHelper.buildJson();
+            outputTextArea.setText(value);
+            warningLabel.setVisible(false);
+            warningLabel.setManaged(false);
+        }catch (Exception ex){
+            warningLabel.setVisible(true);
+            warningLabel.setManaged(true);
+        }
         pojoHelper.removeFiles();
     }
 
