@@ -37,8 +37,8 @@ public class MainPanelController implements Initializable {
         targetLang.getSelectionModel().selectFirst();
         sourceLang.getSelectionModel().selectFirst();
         annotationLang.getSelectionModel().selectFirst();
-        warningLabel.setVisible(false);
-        warningLabel.setManaged(false);
+        setLabelVisibility(false);
+        setLabelVisibility(false);
     }
 
     @FXML
@@ -47,11 +47,11 @@ public class MainPanelController implements Initializable {
         try {
             String value = pojoHelper.buildJson();
             outputTextArea.setText(value);
-            warningLabel.setVisible(false);
-            warningLabel.setManaged(false);
+            setLabelVisibility(false);
+            setLabelVisibility(false);
         }catch (Exception ex){
-            warningLabel.setVisible(true);
-            warningLabel.setManaged(true);
+            setLabelVisibility(true);
+            setLabelVisibility(true);
         }
         pojoHelper.removeFiles();
     }
@@ -59,5 +59,10 @@ public class MainPanelController implements Initializable {
     public void updateText() throws IOException {
         inputTextArea.setText(inputTextArea.getText());
         Files.write(Paths.get("target/required.json"), inputTextArea.getText().getBytes());
+    }
+
+    private void setLabelVisibility(boolean visible){
+        warningLabel.setVisible(visible);
+        warningLabel.setManaged(visible);
     }
 }
