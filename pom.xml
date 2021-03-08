@@ -64,7 +64,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        com.cmccarthy.Main
+                                        com.cmccarthy.GUIStarter
                                     </mainClass>
                                 </manifest>
                             </archive>
@@ -79,7 +79,6 @@
     </build>
 
     <dependencies>
-
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>

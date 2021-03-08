@@ -57,7 +57,6 @@ public class MainPanelController implements Initializable {
     }
 
     public void updateText() throws IOException {
-        inputTextArea.setText(inputTextArea.getText());
         Files.write(Paths.get("target/required.json"), inputTextArea.getText().getBytes());
     }
 

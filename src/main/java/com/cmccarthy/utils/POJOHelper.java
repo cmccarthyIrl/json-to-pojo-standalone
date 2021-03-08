@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -79,6 +80,13 @@ public class POJOHelper {
             }
         };
         URL source = new URL(new URL("file:"), "target/required.json");
+
+//        File appDir = new File(System.getProperty("user.dir"));
+//        URI uri = new URI(appDir.toURI()+"/target/required.json");
+//        // just to check if the file exists
+//        File file = new File(uri);
+//        System.out.println(file.exists());
+//        URL source = uri.toURL();
 
         SchemaMapper mapper = new SchemaMapper(new RuleFactory(config, new Jackson2Annotator(config), new SchemaStore()), new SchemaGenerator());
         mapper.generate(codeModel, "RootClass", "generated-sources", source);
