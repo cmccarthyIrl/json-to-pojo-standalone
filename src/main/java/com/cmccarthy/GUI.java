@@ -18,12 +18,12 @@ public class GUI extends Application {
 
         Parent pane = FXMLLoader.load(getClass().getResource("/main.fxml"));
         ScreenController screenController = new ScreenController(new Scene(pane));
-
         screenController.add("main", FXMLLoader.load(getClass().getResource("/main.fxml")));
         screenController.activate("main");
+
         primaryStage.setScene(screenController.getScene());
-        primaryStage.setResizable(false);
         primaryStage.setTitle("JSON 2 POJO");
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 }

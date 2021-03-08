@@ -1,5 +1,6 @@
 package com.cmccarthy.controller;
 
+import com.cmccarthy.utils.Constants;
 import com.cmccarthy.utils.POJOHelper;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,6 +9,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -49,7 +51,7 @@ public class MainPanelController implements Initializable {
             outputTextArea.setText(value);
             setLabelVisibility(false);
             setLabelVisibility(false);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             setLabelVisibility(true);
             setLabelVisibility(true);
         }
@@ -57,10 +59,14 @@ public class MainPanelController implements Initializable {
     }
 
     public void updateText() throws IOException {
-        Files.write(Paths.get("target/required.json"), inputTextArea.getText().getBytes());
+        File newDirectory = new File(Constants.outputDirectory);
+        if (!newDirectory.exists()) {
+            newDirectory.mkdir();
+        }
+        Files.write(Paths.get(Constants.outputDirectory + "/required.json"), inputTextArea.getText().getBytes());
     }
 
-    private void setLabelVisibility(boolean visible){
+    private void setLabelVisibility(boolean visible) {
         warningLabel.setVisible(visible);
         warningLabel.setManaged(visible);
     }
