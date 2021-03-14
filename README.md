@@ -1,6 +1,6 @@
 # JSON 2 POJO
 
-> Java FX Application
+> Standalone Java FX Application for the JSON2POJO repo
 
 # User Interface
 
@@ -22,5 +22,9 @@
 Spotted a mistake? Questions? Suggestions?
 
 [Open an Issue](https://github.com/cmccarthyIrl/spring-cucumber-test-harness/issues)
+
+#  JSON2POJO Repository
+
+[joelittlejohn - JSON2Pojo](https://github.com/joelittlejohn/jsonschema2pojo)
 
 
