@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import org.jsonschema2pojo.AnnotationStyle;
+import org.jsonschema2pojo.SourceType;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,11 +26,9 @@ public class MainPanelController implements Initializable {
     @FXML
     Label warningLabel = new Label();
     @FXML
-    ComboBox<?> targetLang = new ComboBox<>();
+    ComboBox<String> sourceLang = new ComboBox<>();
     @FXML
-    ComboBox<?> sourceLang = new ComboBox<>();
-    @FXML
-    ComboBox<?> annotationLang = new ComboBox<>();
+    ComboBox<String> annotationLang = new ComboBox<>();
     @FXML
     TextArea inputTextArea = new TextArea();
     @FXML
@@ -36,26 +36,71 @@ public class MainPanelController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        targetLang.getSelectionModel().selectFirst();
         sourceLang.getSelectionModel().selectFirst();
         annotationLang.getSelectionModel().selectFirst();
-        setLabelVisibility(false);
-        setLabelVisibility(false);
+        setLabelVisibility(false, "");
+        
+        // Add placeholder text
+        inputTextArea.setPromptText("Paste your JSON here...");
+        outputTextArea.setPromptText("Generated POJO classes will appear here...");
     }
 
     @FXML
-    public void generatePageObject() throws IOException {
-        updateText();
+    public void generatePageObject() {
+        // Validate input
+        String input = inputTextArea.getText();
+        if (input == null || input.trim().isEmpty()) {
+            setLabelVisibility(true, "Please provide JSON input");
+            return;
+        }
+        
         try {
+            // Configure POJO helper based on dropdown selections
+            configurePojoHelper();
+            
+            // Generate files
+            updateText();
             String value = pojoHelper.buildJson();
             outputTextArea.setText(value);
-            setLabelVisibility(false);
-            setLabelVisibility(false);
+            setLabelVisibility(false, "");
         } catch (Exception ex) {
-            setLabelVisibility(true);
-            setLabelVisibility(true);
+            String errorMessage = ex.getMessage() != null ? ex.getMessage() : "Invalid input. Please check your JSON format.";
+            setLabelVisibility(true, errorMessage);
+            outputTextArea.setText("Error: " + errorMessage);
+            ex.printStackTrace();
+        } finally {
+            try {
+                pojoHelper.removeFiles();
+            } catch (IOException e) {
+                System.err.println("Failed to cleanup temporary files: " + e.getMessage());
+            }
         }
-        pojoHelper.removeFiles();
+    }
+    
+    private void configurePojoHelper() {
+        // Set source type
+        String source = sourceLang.getValue();
+        if ("JSON Schema".equals(source)) {
+            pojoHelper.setSourceType(SourceType.JSONSCHEMA);
+        } else if ("YAML Schema".equals(source)) {
+            pojoHelper.setSourceType(SourceType.YAMLSCHEMA);
+        } else if ("YAML".equals(source)) {
+            pojoHelper.setSourceType(SourceType.YAML);
+        } else {
+            pojoHelper.setSourceType(SourceType.JSON);
+        }
+        
+        // Set annotation style
+        String annotation = annotationLang.getValue();
+        if ("Jackson 1.x".equals(annotation)) {
+            pojoHelper.setAnnotationStyle(AnnotationStyle.JACKSON);
+        } else if ("Gson".equals(annotation)) {
+            pojoHelper.setAnnotationStyle(AnnotationStyle.GSON);
+        } else if ("None".equals(annotation)) {
+            pojoHelper.setAnnotationStyle(AnnotationStyle.NONE);
+        } else {
+            pojoHelper.setAnnotationStyle(AnnotationStyle.JACKSON2);
+        }
     }
 
     public void updateText() throws IOException {
@@ -66,8 +111,11 @@ public class MainPanelController implements Initializable {
         Files.write(Paths.get(Constants.outputDirectory + "/required.json"), inputTextArea.getText().getBytes());
     }
 
-    private void setLabelVisibility(boolean visible) {
+    private void setLabelVisibility(boolean visible, String message) {
         warningLabel.setVisible(visible);
         warningLabel.setManaged(visible);
+        if (visible && message != null && !message.isEmpty()) {
+            warningLabel.setText(message);
+        }
     }
 }

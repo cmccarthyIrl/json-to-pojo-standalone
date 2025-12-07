@@ -17,17 +17,34 @@ import java.util.stream.Stream;
 
 public class POJOHelper {
 
-    private static String readLineByLine() {
-        String[] pathnameList = new File(Constants.generateSourcesDirectory + "/").list();
-        StringBuilder contentBuilder = new StringBuilder();
+    private SourceType sourceType = SourceType.JSON;
+    private AnnotationStyle annotationStyle = AnnotationStyle.JACKSON2;
 
-        assert pathnameList != null;
+    public void setSourceType(SourceType sourceType) {
+        this.sourceType = sourceType;
+    }
+
+    public void setAnnotationStyle(AnnotationStyle annotationStyle) {
+        this.annotationStyle = annotationStyle;
+    }
+
+    private static String readLineByLine() throws IOException {
+        File directory = new File(Constants.generateSourcesDirectory + "/");
+        String[] pathnameList = directory.list();
+        
+        if (pathnameList == null || pathnameList.length == 0) {
+            throw new IOException("No files generated. Please check your input JSON.");
+        }
+        
+        StringBuilder contentBuilder = new StringBuilder();
         for (String pathname : pathnameList) {
-            if (pathname.endsWith(".java")) {
-                try (Stream<String> stream = Files.lines(Paths.get(Constants.generateSourcesDirectory + "/" + pathname), StandardCharsets.UTF_8)) {
+            if (pathname.endsWith(".java") || pathname.endsWith(".scala")) {
+                try (Stream<String> stream = Files.lines(
+                        Paths.get(Constants.generateSourcesDirectory + "/" + pathname), 
+                        StandardCharsets.UTF_8)) {
                     stream.forEach(s -> contentBuilder.append(s).append("\n"));
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    throw new IOException("Error reading generated file: " + pathname, e);
                 }
 
                 contentBuilder.append("\n")
@@ -44,12 +61,12 @@ public class POJOHelper {
         GenerationConfig config = new DefaultGenerationConfig() {
             @Override
             public boolean isGenerateBuilders() {
-                return false;
+                return true;
             }
 
             @Override
             public boolean isIncludeToString() {
-                return false;
+                return true;
             }
 
             @Override
@@ -59,22 +76,17 @@ public class POJOHelper {
 
             @Override
             public boolean isIncludeHashcodeAndEquals() {
-                return false;
+                return true;
             }
 
             @Override
             public AnnotationStyle getAnnotationStyle() {
-                return AnnotationStyle.JACKSON2;
-            }
-
-            @Override
-            public Language getTargetLanguage() {
-                return Language.JAVA;
+                return annotationStyle;
             }
 
             @Override
             public SourceType getSourceType() {
-                return SourceType.JSON;
+                return sourceType;
             }
         };
         URL source = new URL(new URL("file:"), Constants.outputDirectory + "/required.json");

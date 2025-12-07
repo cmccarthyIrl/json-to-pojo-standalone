@@ -1,0 +1,33 @@
+{
+  "products": [
+    {
+      "id": 1001,
+      "name": "Laptop",
+      "category": "Electronics",
+      "price": 999.99,
+      "inStock": true,
+      "specifications": {
+        "brand": "TechCorp",
+        "model": "XPS 15",
+        "processor": "Intel i7",
+        "ram": "16GB",
+        "storage": "512GB SSD"
+      },
+      "tags": ["computer", "portable", "work"]
+    },
+    {
+      "id": 1002,
+      "name": "Wireless Mouse",
+      "category": "Accessories",
+      "price": 29.99,
+      "inStock": true,
+      "specifications": {
+        "brand": "LogiTech",
+        "model": "MX Master 3",
+        "connectivity": "Bluetooth",
+        "batteryLife": "70 days"
+      },
+      "tags": ["mouse", "wireless", "ergonomic"]
+    }
+  ]
+}

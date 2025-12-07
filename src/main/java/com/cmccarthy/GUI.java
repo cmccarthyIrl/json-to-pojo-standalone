@@ -19,20 +19,32 @@ public class GUI extends Application {
     }
     @Override
     public void start(Stage primaryStage) throws Exception {
+        try {
+            Parent pane = FXMLLoader.load(getClass().getResource("/main.fxml"));
+            ScreenController screenController = new ScreenController(new Scene(pane));
+            screenController.add("main", FXMLLoader.load(getClass().getResource("/main.fxml")));
+            screenController.activate("main");
 
-        Parent pane = FXMLLoader.load(getClass().getResource("/main.fxml"));
-        ScreenController screenController = new ScreenController(new Scene(pane));
-        screenController.add("main", FXMLLoader.load(getClass().getResource("/main.fxml")));
-        screenController.activate("main");
-
-        primaryStage.setScene(screenController.getScene());
-        primaryStage.setTitle("JSON 2 POJO");
-        primaryStage.setResizable(false);
-        primaryStage.show();
+            primaryStage.setScene(screenController.getScene());
+            primaryStage.setTitle("JSON 2 POJO Converter");
+            primaryStage.setResizable(false);  // Keep false to avoid macOS tracking rect bug
+            primaryStage.show();
+        } catch (Exception e) {
+            System.err.println("Failed to start application: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @Override
-    public void stop() throws IOException {
-        FileUtils.deleteDirectory(new File(Constants.outputDirectory + "/"));
+    public void stop() {
+        try {
+            File outputDir = new File(Constants.outputDirectory + "/");
+            if (outputDir.exists()) {
+                FileUtils.deleteDirectory(outputDir);
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to cleanup output directory: " + e.getMessage());
+        }
     }
 }

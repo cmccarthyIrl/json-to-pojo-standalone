@@ -19,18 +19,25 @@
         <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
         </rowConstraints>
-        <TitledPane animated="false" collapsible="false" prefHeight="900.0" prefWidth="548.0" text="Input"
+        <TitledPane animated="false" collapsible="false" prefHeight="900.0" prefWidth="548.0" text="Input (JSON/YAML)"
                     GridPane.columnIndex="0">
-            <VBox alignment="TOP_CENTER" nodeOrientation="LEFT_TO_RIGHT" prefWidth="100.0">
-                <Label fx:id="warningLabel" text="Input value is not valid" textFill="#f50303" VBox.vgrow="NEVER"/>
-                <TextArea id="inputTextArea" fx:id="inputTextArea" VBox.vgrow="ALWAYS"/>
+            <VBox alignment="TOP_CENTER" nodeOrientation="LEFT_TO_RIGHT" prefWidth="100.0" spacing="5">
+                <padding>
+                    <Insets top="5.0" bottom="5.0" left="5.0" right="5.0"/>
+                </padding>
+                <Label fx:id="warningLabel" text="Input value is not valid" textFill="#f50303" VBox.vgrow="NEVER" 
+                       style="-fx-font-weight: bold;" wrapText="true"/>
+                <TextArea id="inputTextArea" fx:id="inputTextArea" VBox.vgrow="ALWAYS" 
+                          style="-fx-font-family: 'Courier New', monospace; -fx-font-size: 12px;"/>
             </VBox>
         </TitledPane>
-        <TitledPane animated="false" collapsible="false" prefHeight="900.0" prefWidth="548.0" text="Output"
+        <TitledPane animated="false" collapsible="false" prefHeight="900.0" prefWidth="548.0" text="Output (Generated POJOs)"
                     GridPane.columnIndex="1">
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                 <TextArea id="outputTextArea" fx:id="outputTextArea" maxHeight="1.7976931348623157E308"
                           maxWidth="1.7976931348623157E308" prefHeight="729.0" prefWidth="546.0"
+                          editable="false"
+                          style="-fx-font-family: 'Courier New', monospace; -fx-font-size: 12px;"
                           AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                           AnchorPane.topAnchor="0.0"/>
             </AnchorPane>
@@ -40,17 +47,11 @@
         <padding>
             <Insets left="5.0" top="5.0"/>
         </padding>
-        <ComboBox fx:id="targetLang" prefHeight="26.0" prefWidth="167.0" promptText="Target Language">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="Java"/>
-                    <String fx:value="Scala"/>
-                </FXCollections>
-            </items>
+        <Label text="JSON to POJO Converter" style="-fx-font-size: 16px; -fx-font-weight: bold;">
             <FlowPane.margin>
-                <Insets right="5.0"/>
+                <Insets right="15.0"/>
             </FlowPane.margin>
-        </ComboBox>
+        </Label>
         <ComboBox fx:id="sourceLang" prefHeight="26.0" prefWidth="167.0" promptText="Source Language">
             <items>
                 <FXCollections fx:factory="observableArrayList">
@@ -81,6 +82,9 @@
     </FlowPane>
     <FlowPane alignment="CENTER" columnHalignment="CENTER" layoutY="745.0" prefHeight="52.0" prefWidth="1097.0"
               prefWrapLength="0.0">
-        <Button fx:id="generatePOJO" mnemonicParsing="false" onAction="#generatePageObject" text="Generate POJO"/>
+        <Button fx:id="generatePOJO" mnemonicParsing="false" onAction="#generatePageObject" 
+                text="Generate POJO"
+                style="-fx-font-size: 14px; -fx-padding: 10px 20px;"
+                defaultButton="true"/>
     </FlowPane>
 </Pane>
